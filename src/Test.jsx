@@ -9,60 +9,60 @@ const Test = props => {
 
 
     useEffect(() => {
-        //getCharacters();
-        //getUsers();
-        getAsyncCharacters();
-        getAsyncUsers();
-        getCharactersById(1);
+        getCharacters();
+        getUsers();
+        //getAsyncCharacters();
+        //getAsyncUsers();
+        //getCharactersById(1);
     }, [])
 
-    /*     const getCharacters = () => {
-            fetch('https://rickandmortyapi.com/api/characters', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+    const getCharacters = () => {
+        fetch('https://rickandmortyapi.com/api/character', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 404) throw new Error('Pagina no encontrada');
+
+                return response.json();
             })
-                .then((response) => {
-                    console.log(response);
-                    if (response.status === 404) throw new Error('Pagina no encontrada');
-    
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log(data);
-                    setCharacters(data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        }
-    
-        const getUsers = () => {
-            fetch('https://jsonplaceholder.typicode.com/users', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            .then((data) => {
+                console.log(data);
+                setCharacters(data);
             })
-    
-                .then((response) => {
-                    console.log(response);
-    
-                    if (response.status === 404) throw new Error({ error: 'Pagina no encontrada' });
-    
-                    return response.json();
-                })
-    
-                .then((data) => {
-                    console.log(data);
-                    setUsers(data);
-                })
-    
-                .catch((error) => {
-                    console.log(error);
-                })
-        } */
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    const getUsers = () => {
+        fetch('https://jsonplaceholder.typicode.com/users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+            .then((response) => {
+                console.log(response);
+
+                if (response.status === 404) throw new Error({ error: 'Pagina no encontrada' });
+
+                return response.json();
+            })
+
+            .then((data) => {
+                console.log(data);
+                setUsers(data);
+            })
+
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
     const getAsyncCharacters = async () => {
         try {
@@ -103,13 +103,13 @@ const Test = props => {
 
 
     const getCharactersById = (id) => {
-        fetch('https://rickandmortyapi.com/api/character/'+id)
+        fetch('https://rickandmortyapi.com/api/character/' + id)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
                 return data;
             })
-            .then(async( data) => {
+            .then(async (data) => {
                 const resp = await fetch(data.episode[0]);
                 //console.log(resp);
                 const info = await resp.json();
@@ -127,7 +127,24 @@ const Test = props => {
     */
 
     return (
-        <h1>Test App</h1>
+        <>
+            <h1>Test App</h1>
+            <ul className="list-group">
+                {
+                    !!characters &&
+                        characters.results.length > 0 ?
+                        characters.results.map((char) => {
+                            return (
+                                <li className='list-group-item' key={char.id}>{char.name}</li>
+                            )
+                        }) : (
+                            <div className="spinner-border text-secondary" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        )
+                }
+            </ul>
+        </>
     )
 }
 
